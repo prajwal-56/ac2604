@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accessible Coconut 26.04 — Build Documentation</title>
+<style>
+  :root{
+    --bg: #F6F6F3;
+    --surface: #FFFFFF;
+    --text: #21262B;
+    --text-muted: #5B6168;
+    --border: #E1E1DD;
+    --accent: #1F6F63;
+    --accent-soft: #E6F1EE;
+    --warn: #8A5A17;
+    --warn-soft: #FAF0DD;
+    --code-bg: #EFEFEA;
+    --code-text: #383D34;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .layout{
+    display: grid;
+    grid-template-columns: 260px minmax(0,1fr);
+    max-width: 1180px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  /* ---------- Sidebar ---------- */
+  aside{
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 32px 20px 32px 24px;
+    border-right: 1px solid var(--border);
+  }
+
+  .brand{
+    margin-bottom: 4px;
+  }
+  .brand-name{
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+  .brand-sub{
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .brand-meta{
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 12px 0 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  nav ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  nav > ul > li { margin-bottom: 2px; }
+  nav a{
+    display: block;
+    padding: 6px 8px;
+    border-radius: 5px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+  nav a:hover{
+    background: var(--accent-soft);
+    color: var(--text);
+    text-decoration: none;
+  }
+  nav .top-link a{
+    font-weight: 600;
+    color: var(--text);
+  }
+  nav ul ul{
+    margin-left: 10px;
+    border-left: 1px solid var(--border);
+    padding-left: 6px;
+    margin-bottom: 8px;
+  }
+  nav ul ul a{ font-size: 0.85rem; }
+
+  /* Mobile nav toggle (hidden on desktop) */
+  .mobile-nav-toggle{ display: none; }
+
+  /* ---------- Main content ---------- */
+  main{
+    padding: 48px 48px 96px;
+    max-width: 760px;
+  }
+
+  .doc-title{
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .doc-lede{
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    margin: 0 0 40px;
+    max-width: 62ch;
+  }
+
+  section{ margin-bottom: 56px; }
+  section h2{
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+    padding-top: 8px;
+    scroll-margin-top: 16px;
+  }
+  section > p.section-intro{
+    color: var(--text-muted);
+    margin: 0 0 24px;
+  }
+
+  article.topic{
+    margin-bottom: 36px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  article.topic:last-child{
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  article.topic h3{
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    scroll-margin-top: 16px;
+  }
+  article.topic p{ margin: 10px 0; }
+  article.topic ul{ margin: 10px 0; padding-left: 22px; }
+  article.topic li{ margin: 4px 0; }
+
+  .status{
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 999px;
+    letter-spacing: 0.01em;
+  }
+  .status-fixed{ background: var(--accent-soft); color: var(--accent); }
+  .status-open{ background: var(--warn-soft); color: var(--warn); }
+
+  code, .path{
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 1px 5px;
+    border-radius: 4px;
+    word-break: break-word;
+  }
+
+  .callout{
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 14px 0;
+    font-size: 0.93rem;
+  }
+  .callout.warn{
+    border-left-color: var(--warn);
+    background: var(--warn-soft);
+  }
+  .callout p{ margin: 0; }
+  .callout strong{ display:block; margin-bottom: 4px; }
+
+  table{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 0.92rem;
+  }
+  th, td{
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th{
+    font-size: 0.78rem;
+    text-transform: none;
+    color: var(--text-muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--text);
+  }
+
+  .apps-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px 24px;
+    font-size: 0.92rem;
+    margin: 14px 0;
+  }
+  .apps-grid div{ padding: 3px 0; border-bottom: 1px dotted var(--border); }
+
+  hr.divider{
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  footer.doc-footer{
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 900px){
+    .layout{ grid-template-columns: 1fr; }
+    aside{
+      position: static;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 20px;
+    }
+    nav{ display: none; }
+    nav.nav-open{ display: block; }
+    .mobile-nav-toggle{
+      display: inline-block;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.85rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    main{ padding: 32px 20px 64px; }
+    .apps-grid{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <aside>
+    <div class="brand">
+      <div class="brand-name">Accessible Coconut 26.04</div>
+      <div class="brand-sub">"Resolute Raccoon" — build documentation</div>
+    </div>
+    <div class="brand-meta">
+      Internal project notes, Zendalona<br>
+      Ported from Accessible Coconut 22.04
+    </div>
+
+    <button class="mobile-nav-toggle" onclick="document.querySelector('nav').classList.toggle('nav-open')">
+      Contents ▾
+    </button>
+
+    <nav>
+      <ul>
+        <li class="top-link"><a href="#overview">Overview</a></li>
+        <li class="top-link"><a href="#fixes">Fixes &amp; Customizations</a>
+          <ul>
+            <li><a href="#calamares">Calamares installer crash</a></li>
+            <li><a href="#panel">Panel layout</a></li>
+            <li><a href="#shortcuts">Keyboard shortcuts</a></li>
+            <li><a href="#ibus-braille">IBus-Braille toggle</a></li>
+            <li><a href="#orca-login">Orca at the login screen</a></li>
+            <li><a href="#orca-autostart">Orca autostart</a></li>
+            <li><a href="#casper">Casper overlay crash</a></li>
+            <li><a href="#rebranding">Rebranding</a></li>
+            <li><a href="#apps">Installed applications</a></li>
+          </ul>
+        </li>
+        <li class="top-link"><a href="#known-issues">Known Issues</a></li>
+        <li class="top-link"><a href="#learnings">Technical Learnings</a></li>
+        <li class="top-link"><a href="#tools">Tools &amp; Resources</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main>
+    <h1 class="doc-title">Accessible Coconut 26.04</h1>
+    <p class="doc-lede">
+      A record of the work done so far porting Accessible Coconut — an accessibility-focused
+      Ubuntu MATE derivative for visually impaired users — from its 22.04 release to a
+      Kubuntu 26.04 base, codenamed "Resolute Raccoon."
+    </p>
+
+    <section id="overview">
+      <h2>Overview</h2>
+      <p>
+        Accessible Coconut (AC) is maintained by Zendalona and built around a full accessibility
+        stack — Orca screen reading, Braille input, OCR, and a keyboard-first desktop — layered
+        onto Ubuntu MATE. AC 26.04 continues that work on a newer base, using AC 22.04 as the
+        reference for anything that already worked: keyboard shortcuts, panel layout, screen
+        reader behavior, and the bundled application set.
+      </p>
+      <p>
+        The base for this release is a stock Kubuntu 26.04 ISO rather than Ubuntu MATE directly,
+        because Kubuntu's installer (Calamares) and its accessibility stack behaved better as a
+        starting point. The ISO is customized with Cubic, which chroots into the ISO's filesystem
+        for editing and then regenerates the ISO from the modified chroot.
+      </p>
+      <p>
+        Converting the base from KDE to MATE followed a fixed sequence of checks so that nothing
+        was removed before its dependencies were understood:
+      </p>
+      <ul>
+        <li>Confirm what the KDE/Plasma stack pulls in, and that Calamares does not depend on it.</li>
+        <li>Remove <code>kubuntu-desktop</code>, <code>plasma-desktop</code>, and <code>sddm</code>, then
+          clear orphaned dependencies, and re-confirm Calamares survived the removal.</li>
+        <li>Install <code>mate-desktop-environment-core</code> and <code>lightdm</code>.</li>
+        <li>Resolve the display-manager conflict by setting MATE as the default session in
+          LightDM's <code>.conf.d</code> configuration, since a live ISO auto-logs into a session
+          rather than showing a login picker.</li>
+        <li>Verify only one display manager is enabled, a MATE session entry exists, and Orca is
+          installed.</li>
+        <li>Confirm the Calamares installer launcher still exists on the live desktop.</li>
+        <li>Apply Accessible Coconut branding only once MATE was confirmed to boot cleanly.</li>
+        <li>Clean the chroot and generate the ISO.</li>
+        <li>Test in an emulator with Orca actually driving the desktop and the installer, then
+          test on physical hardware.</li>
+      </ul>
+      <p>
+        Testing throughout has relied on invoking QEMU directly rather than Cubic's built-in test
+        button, which has proven unreliable. The fixes described below were found through that
+        testing process, including a round of tester feedback that flagged a specific set of
+        missing shortcuts, panel behavior, and applications — most of which are now resolved.
+      </p>
+    </section>
+
+    <section id="fixes">
+      <h2>Fixes &amp; Customizations</h2>
+      <p class="section-intro">
+        Each of the following was broken or missing at some point during the build and has since
+        been fixed and verified on a fresh boot, unless noted otherwise.
+      </p>
+
+      <article class="topic" id="calamares">
+        <h3>Calamares installer crash <span class="status status-fixed">Fixed</span></h3>
+        <p>
+          The installer crashed during install for two separate reasons that had to be found and
+          fixed independently.
+        </p>
+        <p>
+          First, Cubic's own GUI fields for Volume ID, Release, and Disk Name were malformed.
+          Cubic regenerates the ISO's <code>.disk/info</code> file from these GUI fields every
+          time the ISO is generated, which means any manual edits made directly to that file are
+          silently overwritten on the next build. The fields now use corrected values entered
+          through the Cubic interface itself, rather than edited in the file afterward.
+        </p>
+        <p>
+          Second, and the actual root cause of the crash: Ubuntu 26.04 renamed casper's CD-ROM
+          setup script from <code>41apt_cdrom</code> to <code>41apt_build_cache_cdrom</code>. The
+          new script only preserves an existing <code>cdrom.sources</code> file — it does not
+          create one — and that file was missing entirely from the chroot. It was restored by
+          extracting a working copy from a stock Kubuntu 26.04 squashfs and placing it at
+          <code class="path">/etc/apt/sources.list.d/cdrom.sources</code> inside the chroot.
+        </p>
+        <div class="callout">
+          <strong>Related fix</strong>
+          <p>
+            A separate installation failure, seen after an earlier round of testing, was traced to
+            a file that had been lost during a prior cleanup pass rather than to a new bug. Once
+            restored, a full install was completed and verified on a fresh boot.
+          </p>
+        </div>
+      </article>
+
+      <article class="topic" id="panel">
+        <h3>Panel layout <span class="status status-fixed">Fixed</span></h3>
+        <p>
+          The panel layout is defined as a system-wide dconf default rather than a per-user
+          setting, so every account gets the same layout without any first-login configuration
+          step. The reference layout was captured directly from a live boot of AC 22.04 using
+          <code>dconf dump</code>, rather than reconstructed from memory.
+        </p>
+        <p>
+          The top panel carries the menu bar, a Firefox launcher, the notification area, and the
+          combined system tray. The bottom panel carries the Brisk application menu, the trash
+          applet, show-desktop, the workspace switcher, and the window list.
+        </p>
+        <p>
+          An earlier build shipped with MATE's default Compact Menu on the bottom panel instead of
+          Brisk Menu, which testing flagged as inconsistent with Accessible Coconut's expected
+          layout; this has since been corrected. The applet identifiers used in the panel
+          configuration were confirmed by reading each applet's <code>.mate-panel-applet</code>
+          file directly rather than guessed from its package name.
+        </p>
+        <p>
+          The system tray is handled by a single combined indicator applet rather than several
+          separate ones, and getting it to actually display Wi-Fi, Bluetooth, volume, and the
+          clock required installing the full Ayatana indicator service stack — not just the applet
+          package — along with <code>network-manager-gnome</code> and <code>blueman</code>.
+        </p>
+      </article>
+
+      <article class="topic" id="shortcuts">
+        <h3>Keyboard shortcuts <span class="status status-fixed">Fixed</span></h3>
+        <p>
+          All shortcuts carried over from AC 22.04 have been reimplemented and confirmed working
+          on a fresh live boot. On this MATE build, GNOME-style custom keybindings under the media
+          keys settings daemon are not supported, so every shortcut is instead wired through the
+          Marco window manager's own key-binding schema, which pairs a key combination with a
+          command to run.
+        </p>
+        <p>
+          Volume shortcuts talk to <code>pactl</code> directly rather than going through a helper
+          script. Panel-switching with <code>Super+Tab</code> needed an extra step: it required
+          remapping Marco's own built-in panel-cycling shortcut, since that shortcut already
+          existed and would otherwise conflict.
+        </p>
+        <table>
+          <thead><tr><th>Shortcut</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><code>Super+Alt+Up</code></td><td>Increase system volume</td></tr>
+            <tr><td><code>Super+Alt+Down</code></td><td>Decrease system volume</td></tr>
+            <tr><td><code>Super+Alt+7</code></td><td>Mute system volume</td></tr>
+            <tr><td><code>Super+Alt+S</code></td><td>Toggle screen reader</td></tr>
+            <tr><td><code>Super+Alt+O</code></td><td>Restart screen reader</td></tr>
+            <tr><td><code>Super+Alt+B</code></td><td>Announce battery status</td></tr>
+            <tr><td><code>Super+Tab</code></td><td>Switch between panels and desktop</td></tr>
+            <tr><td><code>Super+Alt+Page Down</code></td><td>Screen off</td></tr>
+            <tr><td><code>Super+Alt+Page Up</code></td><td>Screen on</td></tr>
+            <tr><td><code>Super+Alt+End</code></td><td>Touchpad off</td></tr>
+            <tr><td><code>Super+Alt+Home</code></td><td>Touchpad on</td></tr>
+          </tbody>
+        </table>
+        <p>
+          A separate lesson from this work: a dconf keyfile that defines multiple keys under the
+          same schema path must use a single section header. Splitting them across duplicate
+          headers in the same file causes the parser to silently fail, with no error to point at
+          the cause.
+        </p>
+      </article>
+
+      <article class="topic" id="ibus-braille">
+        <h3>IBus-Braille toggle <span class="status status-fixed">Fixed</span></h3>
+        <p>
+          Bound to <code>Super+I</code>, using the same Marco key-binding mechanism as the other
+          shortcuts. The script behind it checks whether the IBus daemon is already running and
+          whether IBus-Braille is the currently active input engine, and switches to it if not,
+          rather than blindly restarting the input method each time.
+        </p>
+      </article>
+
+      <article class="topic" id="orca-login">
+        <h3>Orca at the login screen <span class="status status-fixed">Fixed</span></h3>
+        <p>
+          Testing found that the screen reader was silent at the LightDM login screen, which is a
+          separate problem from Orca not starting inside a user's own session. This was fixed in
+          LightDM's greeter configuration, which now explicitly launches Orca and enables its
+          accessibility state for the greeter itself.
+        </p>
+      </article>
+
+      <article class="topic" id="orca-autostart">
+        <h3>Orca autostart <span class="status status-fixed">Fixed</span></h3>
+        <p>
+          Once a user is logged in, Orca now starts automatically as a system-wide default rather
+          than something each user session has to enable. This is set through the same system
+          dconf mechanism as the panel layout, with a system profile pointing user sessions at that
+          shared configuration.
+        </p>
+      </article>
+
+      <article class="topic" id="casper">
+        <h3>Casper overlay crash <span class="status status-fixed">Fixed</span></h3>
+        <p>
+          A known issue in Ubuntu 26.04's live boot process: the overlay filesystem module is now
+          built directly into the kernel rather than loaded as a module, but casper's boot script
+          still tries to load it and treats the failure as fatal. The fix removes that fatal
+          failure path from the casper script and rebuilds the initramfs so the change takes
+          effect at boot.
+        </p>
+      </article>
+
+      <article class="topic" id="rebranding">
+        <h3>Rebranding <span class="status status-fixed">Fixed</span></h3>
+        <p>
+          Visual and identity branding is complete: desktop wallpaper, the LightDM greeter
+          background, the Plymouth boot theme, system identification files, and the GRUB boot menu
+          entries and boot chime all reflect Accessible Coconut rather than the Kubuntu base.
+        </p>
+        <p>
+          The live session's default username and hostname required special handling. Editing
+          <code class="path">/etc/hostname</code> or the casper configuration inside the chroot
+          does not stick, because casper overwrites both at boot time from settings baked into the
+          initramfs itself. The fix was to unpack the initramfs, edit the relevant configuration
+          there, and repack it, rather than editing the chroot's own copy of those files.
+        </p>
+      </article>
+
+      <article class="topic" id="apps">
+        <h3>Installed applications <span class="status status-fixed">Fixed</span></h3>
+        <p>
+          An earlier test build was missing a set of applications that ship by default in AC
+          22.04. All of them have since been installed and confirmed present, with one exception
+          noted under Known Issues below.
+        </p>
+        <div class="apps-grid">
+          <div>Artha — offline dictionary</div>
+          <div>Audacious — audio player</div>
+          <div>Audacity — sound recording &amp; editing</div>
+          <div>Blueman — Bluetooth manager</div>
+          <div>Brasero — CD/DVD writing</div>
+          <div>Chromium &amp; Firefox — web browsing</div>
+          <div>Daisy-Player — DAISY audio playback</div>
+          <div>eBook-Speaker — read ebooks aloud</div>
+          <div>Gimp — image editing</div>
+          <div>Gparted — partition management</div>
+          <div>IBus-Braille — six/eight-key Braille input</div>
+          <div>LibreOffice — office suite</div>
+          <div>Lios — OCR &amp; document reading</div>
+          <div>LMMS — music production</div>
+          <div>Pluma — text editor</div>
+          <div>SMPlayer &amp; VLC — audio/video playback</div>
+          <div>Startup Disk Creator — bootable USB creation</div>
+          <div>Orca — screen reader</div>
+        </div>
+      </article>
+    </section>
+
+    <section id="known-issues">
+      <h2>Known Issues</h2>
+      <p class="section-intro">
+        Open items that still need investigation before release. These are tracked here
+        deliberately rather than folded into the fixes above.
+      </p>
+
+      <article class="topic">
+        <h3>Post-install GRUB shows Kubuntu branding <span class="status status-open">Open</span></h3>
+        <p>
+          After a full install completes, the GRUB boot menu reverts to Kubuntu's branding
+          instead of Accessible Coconut's. This happens because Calamares runs its own
+          <code>update-grub</code> inside the newly installed system, using that system's own
+          GRUB configuration and distributor name — the ISO's own GRUB menu edits never come into
+          play once installed. The fix is expected to be a correction to the installed system's
+          default GRUB distributor setting, verified before the next rebuild.
+        </p>
+      </article>
+
+      <article class="topic">
+        <h3>Orca voice sounded different during install <span class="status status-open">Open</span></h3>
+        <p>
+          During a test install, Orca's voice did not match what was expected. It isn't yet clear
+          whether this is a quirk specific to the Calamares installer environment or a genuine
+          configuration bug. This needs to be re-checked from inside a fully installed system
+          rather than the live/installer environment.
+        </p>
+      </article>
+
+      <article class="topic">
+        <h3>Screen reader intermittently stopped during install <span class="status status-open">Open</span></h3>
+        <p>
+          Orca stopped and restarted unexpectedly at points during a test install. The cause has
+          not been confirmed — candidates include an accidental toggle of the screen-reader
+          shortcut, Orca crashing and respawning when it hits one of Calamares' Qt dialogs, or a
+          speech-dispatcher issue. If it recurs, the next step is reviewing system logs and session
+          error output from that run.
+        </p>
+      </article>
+
+      <article class="topic">
+        <h3>Sharada Braille Writer unavailable <span class="status status-open">Open</span></h3>
+        <p>
+          The PPA that provided this application no longer resolves for this release's codename,
+          so it cannot currently be installed. This is documented as a known gap rather than a bug
+          to fix, unless an alternative source is found.
+        </p>
+      </article>
+    </section>
+
+    <section id="learnings">
+      <h2>Technical Learnings</h2>
+      <p class="section-intro">
+        Patterns worth remembering for the rest of this build, and for whoever picks it up next.
+      </p>
+      <ul>
+        <li>
+          Cubic regenerates <code class="path">.disk/info</code> from its own GUI fields on every
+          ISO generation. Fix metadata like Volume ID and Release Name in the GUI itself, not by
+          hand-editing the file afterward.
+        </li>
+        <li>
+          Ubuntu 26.04 renamed casper's CD-ROM script and changed its behavior: it now only
+          preserves an existing <code class="path">cdrom.sources</code> file rather than creating
+          one, so a base image that lacks it will need that file seeded manually.
+        </li>
+        <li>
+          <code>gsettings set</code> only works inside a live session with a running D-Bus session
+          bus. It silently does nothing when run inside a chroot, which can look like success at
+          the time and only surface as a problem later. All permanent settings need to be written
+          as dconf system keyfiles instead.
+        </li>
+        <li>
+          MATE schema paths are not always cased the way their schema ID suggests — always confirm
+          the real path with <code>dconf dump</code> before writing a keyfile rather than assuming.
+        </li>
+        <li>
+          A live session can show a setting "working" after a manual <code>gsettings set</code>
+          even across a reboot, because a user's own dconf database overrides the system database.
+          Settings should always be verified from a completely fresh session, not a reused one.
+        </li>
+        <li>
+          Keybinding conflicts can happen at the window-manager level before the settings daemon
+          ever sees the key press, which is why some shortcuts needed a conflicting built-in
+          binding remapped rather than just adding the new one.
+        </li>
+        <li>
+          A single dconf keyfile section must not be split across duplicate headers — doing so
+          fails silently rather than raising an error.
+        </li>
+        <li>
+          Cubic's initramfs is managed separately from the chroot's own filesystem. Anything
+          casper sets at boot time — hostname, casper configuration, hosts file — will overwrite
+          whatever was edited in the chroot, so those changes have to be made inside the initramfs
+          itself.
+        </li>
+        <li>
+          Calamares runs its own GRUB update inside the freshly installed system, using that
+          system's own configuration rather than anything set at the ISO level.
+        </li>
+      </ul>
+    </section>
+
+    <section id="tools">
+      <h2>Tools &amp; Resources</h2>
+      <ul>
+        <li><strong>Cubic</strong> — ISO customization and chroot tool used to build the image.</li>
+        <li><strong>QEMU</strong> — used directly (not through Cubic's test button) for reliable ISO testing.</li>
+        <li><strong>dconf</strong> — used to capture reference configuration from AC 22.04 and to deploy system-wide MATE settings on AC 26.04.</li>
+        <li><strong>unsquashfs</strong> — used to extract reference files from a stock Kubuntu squashfs image.</li>
+        <li><strong>Accessible Coconut 22.04</strong> — the reference build for panel layout, shortcut architecture, and the installed application set.</li>
+      </ul>
+    </section>
+
+    <footer class="doc-footer">
+      Accessible Coconut is maintained by Zendalona. This document reflects the project's
+      state as of the most recent build and testing pass, and will be updated as remaining
+      issues are resolved.
+    </footer>
+  </main>
+
+</div>
+
+</body>
+</html>
