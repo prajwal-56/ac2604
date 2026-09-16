@@ -319,22 +319,22 @@
     <p class="doc-lede">
       A record of the work done so far porting Accessible Coconut — an accessibility-focused
       Ubuntu MATE derivative for visually impaired users — from its 22.04 release to a
-      Kubuntu 26.04 base, codenamed "Resolute Raccoon."
+      <strong> Kubuntu 26.04 </strong> base, "Resolute Raccoon." 
     </p>
 
     <section id="overview">
       <h2>Overview</h2>
       <p>
-        Accessible Coconut (AC) is maintained by Zendalona and built around a full accessibility
-        stack — Orca screen reading, Braille input, OCR, and a keyboard-first desktop — layered
-        onto Ubuntu MATE. AC 26.04 continues that work on a newer base, using AC 22.04 as the
+        Accessible Coconut (AC) 26.04 is a Linux distro built on top of Kubuntu with desktop environment as MATE. 
+        AC 26.04 continues that work on a newer base, using AC 22.04 as the
         reference for anything that already worked: keyboard shortcuts, panel layout, screen
         reader behavior, and the bundled application set.
       </p>
       <p>
-        The base for this release is a stock Kubuntu 26.04 ISO rather than Ubuntu MATE directly,
+        The base for this release is a stock <strong>Kubuntu 26.04</strong> ISO rather than Ubuntu MATE directly,
         because Kubuntu's installer (Calamares) and its accessibility stack behaved better as a
-        starting point. The ISO is customized with Cubic, which chroots into the ISO's filesystem
+        starting point and in addition to it, the ubuntu 26.04's installer (subiquity) - lacks accessibility. 
+        The ISO is customized with Cubic, which chroots into the ISO's filesystem
         for editing and then regenerates the ISO from the modified chroot.
       </p>
       <p>
@@ -352,10 +352,9 @@
         <li>Verify only one display manager is enabled, a MATE session entry exists, and Orca is
           installed.</li>
         <li>Confirm the Calamares installer launcher still exists on the live desktop.</li>
-        <li>Apply Accessible Coconut branding only once MATE was confirmed to boot cleanly.</li>
         <li>Clean the chroot and generate the ISO.</li>
         <li>Test in an emulator with Orca actually driving the desktop and the installer, then
-          test on physical hardware.</li>
+          test on physical hardware (live boot).</li>
       </ul>
       <p>
         Testing throughout has relied on invoking QEMU directly rather than Cubic's built-in test
@@ -427,14 +426,14 @@
           The system tray is handled by a single combined indicator applet rather than several
           separate ones, and getting it to actually display Wi-Fi, Bluetooth, volume, and the
           clock required installing the full Ayatana indicator service stack — not just the applet
-          package — along with <code>network-manager-gnome</code> and <code>blueman</code>.
+          package — along with <code>network-manager-gnome</code> and <code>blueman</code> <i>(for bluetooth).</i>
         </p>
       </article>
 
       <article class="topic" id="shortcuts">
         <h3>Keyboard shortcuts <span class="status status-fixed">Fixed</span></h3>
         <p>
-          All shortcuts carried over from AC 22.04 have been reimplemented and confirmed working
+          All shortcuts carried over from <mark> AC 22.04 have been reimplemented and confirmed working </mark>
           on a fresh live boot. On this MATE build, GNOME-style custom keybindings under the media
           keys settings daemon are not supported, so every shortcut is instead wired through the
           Marco window manager's own key-binding schema, which pairs a key combination with a
@@ -565,14 +564,14 @@
       </p>
 
       <article class="topic">
-        <h3>Post-install GRUB shows Kubuntu branding <span class="status status-open">Open</span></h3>
+        <h3>Post-install GRUB menu branding <span class="status status-open">Open</span></h3>
         <p>
-          After a full install completes, the GRUB boot menu reverts to Kubuntu's branding
-          instead of Accessible Coconut's. This happens because Calamares runs its own
-          <code>update-grub</code> inside the newly installed system, using that system's own
-          GRUB configuration and distributor name — the ISO's own GRUB menu edits never come into
-          play once installed. The fix is expected to be a correction to the installed system's
-          default GRUB distributor setting, verified before the next rebuild.
+        The live-boot GRUB menu correctly shows Accessible Coconut branding. What hasn't been
+        confirmed yet is whether that branding survives a full install — Calamares runs its own
+        <code>update-grub</code> inside the newly installed system, using that system's own GRUB
+        configuration and distributor name, which is a separate code path from the ISO's own GRUB
+        menu. This needs to be checked and confirmed after booting a fully installed system and inspecting its GRUB
+        menu directly, rather than assumed from the live environment.
         </p>
       </article>
 
@@ -582,18 +581,7 @@
           During a test install, Orca's voice did not match what was expected. It isn't yet clear
           whether this is a quirk specific to the Calamares installer environment or a genuine
           configuration bug. This needs to be re-checked from inside a fully installed system
-          rather than the live/installer environment.
-        </p>
-      </article>
-
-      <article class="topic">
-        <h3>Screen reader intermittently stopped during install <span class="status status-open">Open</span></h3>
-        <p>
-          Orca stopped and restarted unexpectedly at points during a test install. The cause has
-          not been confirmed — candidates include an accidental toggle of the screen-reader
-          shortcut, Orca crashing and respawning when it hits one of Calamares' Qt dialogs, or a
-          speech-dispatcher issue. If it recurs, the next step is reviewing system logs and session
-          error output from that run.
+          rather than the live/installer environment. The fix is simpler for this btw
         </p>
       </article>
 
