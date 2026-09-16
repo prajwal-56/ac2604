@@ -1,17 +1,10 @@
 # Accessible Coconut 26.04 — Build Documentation
 
-> **Codename:** "Resolute Raccoon"  
-> **Base:** Kubuntu 26.04 LTS (converted to MATE Desktop Environment)  
-> **Reference:** Accessible Coconut 22.04  
-> **Maintainer:** Zendalona  
-
 ---
 
 ## About This Documentation
 
 This documentation records the work done porting **Accessible Coconut** — an accessibility-focused Ubuntu MATE derivative designed for visually impaired users — from its 22.04 release to a **Kubuntu 26.04** base.
-
-Accessible Coconut retains everything that worked in AC 22.04 (keyboard shortcuts, panel layout, screen reader behavior, bundled accessibility suite) while modernizing the underlying distribution and packages.
 
 ---
 
@@ -31,4 +24,4 @@ The documentation is organized into the following sections:
 
 ## Web Documentation
 
-A standalone single-page web version is also available at [index.html](index.html) with accompanying styling ([style.css](style.css)) and interactivity ([script.js](script.js)).
+A standalone single-page web version is also available at [here](https://prajwal-56.github.io/ac2604)
