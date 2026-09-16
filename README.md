@@ -25,3 +25,10 @@ The documentation is organized into the following sections:
 ## Web Documentation
 
 A standalone single-page web version is also available at [here](https://prajwal-56.github.io/ac2604)
+
+---
+
+## Contact & Support
+
+- **Contact & Socials:** [prajwal-56.github.io/contact](https://prajwal-56.github.io/contact)
+- **Support / Donate:** [prajwal-56.github.io/donate](https://prajwal-56.github.io/donate)

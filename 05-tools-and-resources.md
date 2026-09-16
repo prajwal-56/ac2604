@@ -33,4 +33,11 @@ This documentation reflects build findings and verified configurations as of the
 
 ---
 
+## Contact & Support
+
+- **Contact & Socials:** [prajwal-56.github.io/contact](https://prajwal-56.github.io/contact)
+- **Support / Donate:** [prajwal-56.github.io/donate](https://prajwal-56.github.io/donate)
+
+---
+
 [← Technical Learnings](04-technical-learnings.md) | [Table of Contents](README.md)
