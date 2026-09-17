@@ -6,6 +6,8 @@
 
 This documentation records the work done porting **Accessible Coconut** — an accessibility-focused Ubuntu MATE derivative designed for visually impaired users — from its 22.04 release to a **Kubuntu 26.04** base.
 
+Last updated : 17th September 2026
+
 ---
 
 ## Documentation Structure
